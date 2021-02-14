@@ -1,0 +1,5 @@
+.Container{
+    grid-area: Footer;
+    background-color: red;
+    padding: 1% 5%;
+}

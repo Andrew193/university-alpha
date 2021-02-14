@@ -6,13 +6,19 @@
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
+    "async": "^3.2.0",
+    "crc": "^3.8.0",
+    "express-fileupload": "^1.2.1",
+    "near-dup-detection": "^0.1.15",
+    "pos": "^0.4.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
     "web-vitals": "^1.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm run build && (cd server && npm start)",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
