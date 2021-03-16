@@ -1,64 +1,34 @@
-module.exports={ShowPercentagesSecond:function (content1, content2, shingleLength, callback) {
-    // based on http://habrahabr.ru/post/65944/
-    var args = [];
-    for (var i = 0; i < arguments.length; i++) {
-        args.push(arguments[i]);
-    }
+module.exports = function (content,back) {
 
-    content1 = args.shift();
-    content2 = args.shift();
-    callback = args.pop();
+   let content1 ="let r=4 let y=4 let c=3,5"
+   let content2 = `let c=3,5 let y=4 let r=4`
+   let callback = back;
 
-    if (args.length > 0) {
-        shingleLength = args.shift();
-    } else {
-        shingleLength = 10;
-    }
-
-    // first init modules
     var pos = require('pos');
     var crc = require('crc');
     var fs = require('fs');
     var async = require('async');
 
-    var SHINGLE_LENGTH = shingleLength;
+    var SHINGLE_LENGTH = 1;
 
-    // http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
     function escapeForRegExp(str) {
         return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
     function strWordRemove(text, entry) {
-        // we can't remove 'in' in 'in-app' string
-        // http://stackoverflow.com/questions/2881445/utf-8-word-boundary-regex-in-javascript
         var regex = new RegExp('(^|\\s)' + escapeForRegExp(entry) + '(?=\\s|$)', 'g');
         return text.replace(regex, '');
     }
 
-    // function for clearing the text from all special characters
     function strCharacterRemove(text, entry) {
         var regex = new RegExp(escapeForRegExp(entry), 'g');
         return text.replace(regex, '');
     }
 
-    // this function can be always better
     function textCanonization (text, callback) {
         var withoutTagsRegex = /(<([^>]+)>)/ig;
-
-        // here we have text without html tags
         text = text.replace(withoutTagsRegex, "");
-
         text = text.trim();
-        /*
-         fs.readFile('./data/english.stop', 'utf8', function (err,data) {
-         if (err) {
-         return console.log(err);
-         }
-         var stopWords = (data.split("\n"));
-         stopWords.forEach(strWordRemove);
-         });
-         */
-        // remove all spec symbols
         ['”', '“', "\n", '\r', ',', '.', ':', '$', '#', '"', '(', ')', '[', ']', ';'].forEach(function(entry) {
             text = strCharacterRemove(text, entry);
         });
@@ -73,21 +43,6 @@ module.exports={ShowPercentagesSecond:function (content1, content2, shingleLengt
             var taggedWord = taggedWords[i];
             var word = taggedWord[0];
             var tag = taggedWord[1];
-
-            //Adjective
-
-            /*
-             JJ Adjective                big
-             JJR Adj., comparative       bigger
-             JJS Adj., superlative       biggest
-             CC Coord Conjuncn           and,but,or
-             IN Preposition              of,in,by
-             TO ÒtoÓ                     to
-             UH Interjection             oh, oops
-             DT Determiner               the,some
-             */
-
-            //console.log(word + " /" + tag);
             if (tag === 'NNS') {
                 nounWords.push(word);
             }
@@ -100,12 +55,8 @@ module.exports={ShowPercentagesSecond:function (content1, content2, shingleLengt
         removeWords.forEach(function(entry) {
             text = strWordRemove(text, entry);
         });
-
-        // replace all plural nouns to single ones
         nounWords.forEach(function (entry) {
-            //parent’s || Apple’s || Smurf’s
             if (entry.length > 2 && entry.slice(-2) === "’s") {
-                // now skip it. in future we can test to remove it
                 return;
             }
 
@@ -122,8 +73,6 @@ module.exports={ShowPercentagesSecond:function (content1, content2, shingleLengt
             var rexp = new RegExp('(^|\\s)' + escapeForRegExp(entry) + '(?=\\s|$)', 'g');
             text = text.replace(rexp, "$1" + newOne);
         });
-
-        // http://stackoverflow.com/questions/3286874/remove-all-multiple-spaces-in-javascript-and-replace-with-single-space
         text = text.replace(/ +(?= )/g, '');
 
         return callback(null, text);
@@ -158,14 +107,6 @@ module.exports={ShowPercentagesSecond:function (content1, content2, shingleLengt
 
         return callback(null, hashes);
     };
-
-//*/
-//  var fileJSON = require('./article1.json');
-//  var content1 = fileJSON.content;
-
-//  var fileJSON2 = require('./article2.json');
-//  var content2 = fileJSON2.content;
-
     async.parallel([
         function (callback) {
             textCanonization(content1, function (err, text) {
@@ -218,18 +159,16 @@ module.exports={ShowPercentagesSecond:function (content1, content2, shingleLengt
 
         var compareShingles = function (arr1, arr2) {
             var count = 0;
-
             arr1[0].forEach(function (item) {
-                if (arr2[0].indexOf(item) !== -1) {
+                if (arr2[0].includes(item)) {
                     count++;
                 }
             });
 
-            return count * 2 / (arr1[0].length + arr2[0].length);
+            return (count * 2) / (arr1[0].length + arr2[0].length)*100;
         };
 
         var c = compareShingles(firstHashes, secondHashes);
-
         callback(null, c);
     });
-}}
+};

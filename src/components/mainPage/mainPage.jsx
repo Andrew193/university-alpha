@@ -29,6 +29,9 @@ function MainPage(props) {
     function M2(e) {
       SendData(e,"/checkFileM2")
     }
+    function M3(e) {
+      SendData(e,"/logdata")
+    }
     return(
         <div className={styles.Container}>
             <h1>MainPage</h1>
@@ -41,6 +44,7 @@ function MainPage(props) {
             </ul>
                  <input type='submit' value='Провеpить на плагиат(алгоритм Вагнера-Фишера)' onClick={(e)=>M1(e)} />
                  <input type='submit' value='Провеpить на плагиат(алгоритм Шинглов)' onClick={(e)=>M2(e)}/>
+                 <input type='submit' value='Добавить в базу данных' onClick={(e)=>M3(e)}/>
                  {isLoading?<div className={styles.modalLoader}><img src={loader} alt='loader'/></div>:<h1>Файлы в среднем 
                  похожи на {Percentages}%</h1>}
             </>

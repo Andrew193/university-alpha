@@ -1,10 +1,15 @@
 .Container {
     grid-area: Header;
-    background-color: red;
     padding: 1% 5%;
+    min-height: 40px;
+    box-shadow: 0 1px 2px 0 rgb(60 64 67 / 30%), 0 2px 6px 2px rgb(60 64 67 / 15%);
+    position: fixed;
+    width: 100%;
+    background-color: white;
+    z-index: 1;
 }
 .ActiveLink {
-    color: aqua;
+    color: rgb(31, 247, 96);
 }
 .NavBar {
     display: flex;
@@ -17,7 +22,7 @@
     transition: all ease 0.7s;
     font-size: 24px;
     text-decoration: none;
-    opacity: 0.7;
+    opacity: 0.5;
 }
 .NavBar >a:hover {
     opacity: 1;

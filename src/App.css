@@ -14,4 +14,16 @@
 #root{
   height: 100%;
 }
-
+@media (max-width:570px){
+  h1{
+    font-size: 24px;
+  }
+}
+@media (min-width:1000px){
+  h1,a{
+    font-size: 36px;
+  }
+  input{
+    font-size: 26px;
+  }
+}

@@ -1,6 +1,8 @@
 .Container{
     grid-area: Main;
-    background-color: antiquewhite;
+    background-color: rgb(255, 255, 255);
+    min-height: 776px;
+    
 }
 .modalLoader img{
     height: 175px;
@@ -14,4 +16,34 @@
     background-color: gray;
     opacity: 0.5;
     z-index: 123;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+@media (max-width: 1250px) {
+    .modalLoader img{
+        height: 150px;
+        width: 150px;
+    }
+    .Container{
+        padding-top: 75px;
+    }
+ }
+ @media (min-width: 1250px) {
+    .modalLoader img{
+        height: 220px;
+        width: 220px;
+    }
+    .Container{
+        padding-top: 75px;
+    }
+ }
+ @media (max-width:770px){
+    .modalLoader img{
+    height: 115px;
+    width: 115px;
+    }
+    .Container{
+        padding-top: 45px;
+    }
+ }

@@ -1,10 +1,14 @@
 const Express=require("express")
-const mysql2=require("mysql2")
+const Mysql=require("mysql2")
 const jsonParser=Express.json();
 const path = require("path");
-const connection = null;
+const Connection=Mysql.createConnection({
+  host: "localhost",
+  database: "tatarinova",
+  password: "radeongraphics",
+  user: "root",
+}).promise();
 const fileUpload = require('express-fileupload');
-var ndd = require('near-dup-detection');
 const App=Express()
 const Script = require("./scripts")
 const Script2 = require("./script2")
@@ -14,17 +18,26 @@ App.use(Express.static("public"))
 App.use(fileUpload());
 
 App.post("/checkFileM1",jsonParser,(req,res)=>{
-ndd("grgrg rtrgrg WFF gfg","grg WFF gfg",function(err, result) {
-  console.log(result*100); // from 0 to 1 where 1 - the same documents
-});
-  Script.ShowPercentagesFirst(req.files.file).then((value)=>{
-    res.json({"result":value.reduce((prev,curr)=>prev+=curr,0)/value.length})
+  Connection.query("select * from js").then((result,error)=>{
+    if(!error){
+    Script.ShowPercentagesFirst(req.files.file,result[0]).then((value)=>{
+      console.log(value);
+      res.json({"result":value.reduce((prev,curr)=>prev+=curr,0)/value.length})
+    })
+    }
   })
 })
+App.post("/logdata",jsonParser,(req,res)=>{
+  Connection.query(`INSERT INTO js SET code="${String(req.files.file.data).replace(/[\s.,%"']/g, '')}" 
+  WHERE code NOT IN (SELECT * FROM js)`)
+  res.json({"done":true})
+})
 App.post("/checkFileM2",jsonParser,(req,res)=>{
-  Script2.ShowPercentagesSecond(req.files.file).then((value)=>{
-    res.json({"result":value.reduce((prev,curr)=>prev+=curr,0)/value.length})
-  })
+  Script2(String(req.files.file.data),(error,result)=>{if(error)
+    console.log(error);
+  else
+res.json({"result":result})
+})
 })
 
 
