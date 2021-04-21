@@ -1,12 +1,11 @@
-module.exports = function (content,back) {
+module.exports = function (data1,data2,back) {
 
-   let content1 ="let r=4 let y=4 let c=3,5"
-   let content2 = `let c=3,5 let y=4 let r=4`
+   let content1 =data1.replace(/[\s.,%"']/g, '')
+   let content2 =data2
    let callback = back;
 
     var pos = require('pos');
     var crc = require('crc');
-    var fs = require('fs');
     var async = require('async');
 
     var SHINGLE_LENGTH = 1;
@@ -27,6 +26,7 @@ module.exports = function (content,back) {
 
     function textCanonization (text, callback) {
         var withoutTagsRegex = /(<([^>]+)>)/ig;
+        // text=text.replace(/[\s.,%"']/g, '')
         text = text.replace(withoutTagsRegex, "");
         text = text.trim();
         ['”', '“', "\n", '\r', ',', '.', ':', '$', '#', '"', '(', ')', '[', ']', ';'].forEach(function(entry) {
@@ -107,23 +107,21 @@ module.exports = function (content,back) {
 
         return callback(null, hashes);
     };
+    ///dddddddddddddddddddddd
     async.parallel([
         function (callback) {
             textCanonization(content1, function (err, text) {
                 if (err) {
                     return callback(err);
                 }
-
                 makeShingles(text, function (err, shingles) {
                     if (err) {
                         return callback(err);
                     }
-
                     hashingShingles(shingles, function (err, hashes) {
                         if (err) {
                             return callback(err);
                         }
-
                         callback(null, hashes);
                     });
                 })

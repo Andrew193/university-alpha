@@ -2,7 +2,6 @@ function ShowPercentagesFirst(element, compWith) {
   let comparison = []
   let r = String(element.data)
   return new Promise((resolve, reject) => {
-    debugger
     compWith.forEach((value) => { readAndPush(value.code, r, comparison) })
     resolve(comparison)
   })
@@ -34,7 +33,6 @@ function levenshtein(s1, s2, costs, firstLength, secondLength) {
   var minD = Math.max(minCost, (l1 - l2) * cd);
   var minI = Math.max(minCost, (l2 - l1) * ci);
   var buf = new Array((cutHalf * 2) - 1);
-
   for (i = 0; i <= l2; ++i)   buf[i] = i * minD;
 
   for (i = 0; i < l1; ++i, flip = cutHalf - flip) {
