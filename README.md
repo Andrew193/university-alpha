@@ -14,4 +14,4 @@ If you are interested in the theory of these algorithms, you can find it [here](
 The project was created using [Create React App](https://create-react-app.dev/). Mostly functional components are used. The backend was written using the [Express](https://expressjs.com/) framework. Also, asynchronous information processing was used in the implementation of the Shingles algorithm.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
